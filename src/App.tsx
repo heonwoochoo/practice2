@@ -5,6 +5,7 @@ import * as THREE from "three";
 import styled from "styled-components";
 import Setting from "./Setting";
 import Ground from "./components/Ground";
+import Tree from "./components/Tree";
 
 const Container = styled.div`
   width: 100vw;
@@ -20,10 +21,8 @@ function App() {
         <OrbitControls />
         <primitive object={new THREE.AxesHelper(5)} />
         <Ground />
-        <mesh position={[1, 0, 0]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshPhongMaterial color="green" />
-        </mesh>
+
+        <Tree />
       </Canvas>
     </Container>
   );

@@ -8,8 +8,12 @@ function Ground(props: JSX.IntrinsicElements["group"]) {
     []
   );
   return (
-    <group {...props} rotation={[-Math.PI / 2, 0, 0, "XYZ"]}>
-      <mesh geometry={geometry} material={material} />
+    <group {...props}>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0, "XYZ"]}
+        geometry={geometry}
+        material={material}
+      />
     </group>
   );
 }
