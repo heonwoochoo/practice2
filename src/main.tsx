@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
 import App from "./App";
 
@@ -51,7 +52,9 @@ table {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <>
-    <GlobalStyle />
-    <App />
+    <RecoilRoot>
+      <GlobalStyle />
+      <App />
+    </RecoilRoot>
   </>
 );

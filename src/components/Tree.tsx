@@ -1,23 +1,28 @@
 import * as THREE from "three";
 import {} from "@react-three/fiber";
 import { useCallback, useEffect, useMemo } from "react";
+import { useRecoilValue } from "recoil";
+import { treeLevelState } from "../atom";
 
 function Tree(props: JSX.IntrinsicElements["group"]) {
+  const treeLevel = useRecoilValue(treeLevelState);
   const partWidth = 3;
   const partHeight = 12;
-  const levels = 7;
   const meshes: THREE.Mesh[] = [];
   const geometry = useMemo(
     () =>
       new THREE.CylinderGeometry(partWidth * 0.65, partWidth, partHeight, 8),
     []
   );
+
+  const baseColor = new THREE.Color("#a04500");
   const material = useMemo(
-    () => new THREE.MeshPhongMaterial({ color: "#a04500" }),
+    () => new THREE.MeshPhongMaterial({ color: baseColor }),
     []
   );
   const baseMesh = useMemo(() => new THREE.Mesh(geometry, material), []);
   meshes.push(baseMesh);
+
   const makeBranch = useCallback(
     (level: number, matrix: THREE.Matrix4, color: THREE.Color) => {
       if (level === 0) return;
@@ -25,7 +30,7 @@ function Tree(props: JSX.IntrinsicElements["group"]) {
 
       // type 1
       const newColor1 = color.clone();
-      newColor1.g += 0.7 / levels;
+      newColor1.g += 0.7 / treeLevel;
       const material1 = new THREE.MeshPhongMaterial({ color: newColor1 });
       const mesh1 = new THREE.Mesh(geometry, material1);
 
@@ -46,8 +51,8 @@ function Tree(props: JSX.IntrinsicElements["group"]) {
 
       // type 2
       const newColor2 = color.clone();
-      newColor2.g += 0.7 / levels;
-      const material2 = new THREE.MeshPhongMaterial({ color: newColor1 });
+      newColor2.g += 0.7 / treeLevel;
+      const material2 = new THREE.MeshPhongMaterial({ color: newColor2 });
       const mesh2 = new THREE.Mesh(geometry, material2);
 
       // 단위행렬 생성
@@ -65,11 +70,10 @@ function Tree(props: JSX.IntrinsicElements["group"]) {
 
       makeBranch(level - 1, newMatrix2, newColor2);
     },
-    []
+    [treeLevel]
   );
-  makeBranch(levels, baseMesh.matrix, material.color);
 
-  console.log(meshes);
+  makeBranch(treeLevel, baseMesh.matrix, baseColor);
   return (
     <group position={[0, partHeight * 0.5, 0]} {...props}>
       {meshes.map((mesh) => (
